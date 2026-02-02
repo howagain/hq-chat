@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>HQ Chat</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --orange: #d29922;
+    --purple: #bc8cff;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* --- User Picker --- */
+  #picker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100dvh;
+    gap: 16px;
+  }
+  #picker h1 {
+    font-size: 1.4em;
+    font-weight: 600;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  #picker .users {
+    display: flex;
+    gap: 12px;
+  }
+  #picker button {
+    padding: 14px 28px;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  #picker button:hover {
+    border-color: var(--accent);
+    background: #1c2333;
+  }
+  #picker button[data-user="jacob"] { border-color: var(--green); color: var(--green); }
+  #picker button[data-user="leo"] { border-color: var(--purple); color: var(--purple); }
+  #picker button[data-user="op"] { border-color: var(--orange); color: var(--orange); }
+
+  /* --- Chat Layout --- */
+  #chat { display: none; flex-direction: column; height: 100dvh; }
+  #chat.active { display: flex; }
+
+  /* Header */
+  #header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  #header .title { font-weight: 600; font-size: 1.1em; }
+  #header .status { font-size: 0.85em; color: var(--text-dim); }
+  #header .user-badge {
+    font-size: 0.85em;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  /* Messages */
+  #messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    scroll-behavior: smooth;
+  }
+
+  .msg {
+    max-width: 85%;
+    padding: 8px 12px;
+    border-radius: 12px;
+    word-wrap: break-word;
+    line-height: 1.45;
+  }
+  .msg.mine {
+    align-self: flex-end;
+    background: #1a3a5c;
+    border-bottom-right-radius: 4px;
+  }
+  .msg.theirs {
+    align-self: flex-start;
+    background: var(--surface);
+    border-bottom-left-radius: 4px;
+  }
+  .msg .sender {
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .msg .sender.jacob { color: var(--green); }
+  .msg .sender.leo { color: var(--purple); }
+  .msg .sender.op { color: var(--orange); }
+  .msg .body { font-size: 0.95em; }
+  .msg .time {
+    font-size: 0.7em;
+    color: var(--text-dim);
+    text-align: right;
+    margin-top: 2px;
+  }
+
+  .day-divider {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.75em;
+    padding: 8px 0;
+  }
+
+  /* Input */
+  #input-area {
+    padding: 10px 12px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  #input-area input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 1em;
+    outline: none;
+  }
+  #input-area input:focus { border-color: var(--accent); }
+  #input-area button {
+    padding: 10px 18px;
+    border-radius: 20px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95em;
+    cursor: pointer;
+  }
+  #input-area button:disabled { opacity: 0.4; cursor: default; }
+  #input-area button:hover:not(:disabled) { background: #4090e0; }
+
+  /* Connection indicator */
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .dot.ok { background: var(--green); }
+  .dot.err { background: #f85149; }
+
+  /* Scrollbar */
+  #messages::-webkit-scrollbar { width: 6px; }
+  #messages::-webkit-scrollbar-track { background: transparent; }
+  #messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- User Picker -->
+<div id="picker">
+  <h1>🔧 HQ Chat</h1>
+  <p style="color: var(--text-dim); margin-bottom: 4px;">Who are you?</p>
+  <div class="users">
+    <button data-user="jacob" onclick="join('jacob')">Jacob</button>
+    <button data-user="leo" onclick="join('leo')">Leo</button>
+    <button data-user="op" onclick="join('op')">Op</button>
+  </div>
+</div>
+
+<!-- Chat -->
+<div id="chat">
+  <div id="header">
+    <div>
+      <span class="title">HQ</span>
+      <span class="status"><span class="dot ok" id="connDot"></span><span id="connText">live</span></span>
+    </div>
+    <span class="user-badge" id="userBadge"></span>
+  </div>
+  <div id="messages"></div>
+  <div id="input-area">
+    <input type="text" id="msgInput" placeholder="Message HQ..." autocomplete="off" />
+    <button id="sendBtn" onclick="send()">Send</button>
+  </div>
+</div>
+
+<script>
+const CONVEX = "https://scintillating-oriole-769.convex.cloud";
+const CHANNEL = "hq";
+const COLORS = { jacob: "jacob", leo: "leo", op: "op" };
+const POLL_MS = 1200;
+
+let me = null;
+let knownIds = new Set();
+let pollTimer = null;
+let lastError = 0;
+let isAtBottom = true;
+
+// --- User picker ---
+function join(user) {
+  me = user;
+  document.getElementById("picker").style.display = "none";
+  const chat = document.getElementById("chat");
+  chat.classList.add("active");
+  
+  const badge = document.getElementById("userBadge");
+  badge.textContent = user;
+  badge.style.background = user === "jacob" ? "#1a3520" : user === "leo" ? "#2a1a40" : "#3a2a10";
+  badge.style.color = user === "jacob" ? "var(--green)" : user === "leo" ? "var(--purple)" : "var(--orange)";
+  
+  document.getElementById("msgInput").focus();
+  fetchMessages();
+  pollTimer = setInterval(fetchMessages, POLL_MS);
+  
+  // Track scroll position
+  const el = document.getElementById("messages");
+  el.addEventListener("scroll", () => {
+    isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 60;
+  });
+}
+
+// --- Fetch messages ---
+async function fetchMessages() {
+  try {
+    const res = await fetch(`${CONVEX}/api/query`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        path: "messages:channel",
+        args: { channel: CHANNEL, limit: 100 },
+        format: "json"
+      })
+    });
+    const data = await res.json();
+    if (data.status === "success") {
+      setConnected(true);
+      renderMessages(data.value);
+    } else {
+      setConnected(false);
+    }
+  } catch (e) {
+    setConnected(false);
+  }
+}
+
+// --- Render ---
+function renderMessages(msgs) {
+  // Sort chronological (oldest first)
+  msgs.sort((a, b) => a._creationTime - b._creationTime);
+  
+  const container = document.getElementById("messages");
+  const hadNew = msgs.some(m => !knownIds.has(m._id));
+  
+  if (!hadNew && knownIds.size > 0) return; // no change
+  
+  container.innerHTML = "";
+  let lastDate = "";
+  
+  msgs.forEach(m => {
+    knownIds.add(m._id);
+    const d = new Date(m._creationTime);
+    const dateStr = d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+    
+    if (dateStr !== lastDate) {
+      lastDate = dateStr;
+      const div = document.createElement("div");
+      div.className = "day-divider";
+      div.textContent = dateStr;
+      container.appendChild(div);
+    }
+    
+    const isMine = m.from === me;
+    const div = document.createElement("div");
+    div.className = `msg ${isMine ? "mine" : "theirs"}`;
+    
+    const timeStr = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+    
+    div.innerHTML = `
+      ${!isMine ? `<div class="sender ${COLORS[m.from] || ''}">${esc(m.from)}</div>` : ''}
+      <div class="body">${esc(m.content)}</div>
+      <div class="time">${timeStr}</div>
+    `;
+    container.appendChild(div);
+  });
+  
+  // Auto-scroll if user was at bottom
+  if (isAtBottom) {
+    container.scrollTop = container.scrollHeight;
+  }
+}
+
+// --- Send ---
+async function send() {
+  const input = document.getElementById("msgInput");
+  const text = input.value.trim();
+  if (!text) return;
+  
+  input.value = "";
+  document.getElementById("sendBtn").disabled = true;
+  
+  try {
+    await fetch(`${CONVEX}/api/mutation`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        path: "messages:send",
+        args: { from: me, to: CHANNEL, content: text, kind: "chat", channel: CHANNEL },
+        format: "json"
+      })
+    });
+    // Immediately fetch to show our message
+    await fetchMessages();
+  } catch (e) {
+    console.error("Send failed:", e);
+  }
+  
+  document.getElementById("sendBtn").disabled = false;
+  input.focus();
+}
+
+// --- Connection status ---
+function setConnected(ok) {
+  document.getElementById("connDot").className = `dot ${ok ? "ok" : "err"}`;
+  document.getElementById("connText").textContent = ok ? "live" : "reconnecting...";
+}
+
+// --- Enter to send ---
+document.getElementById("msgInput").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    send();
+  }
+});
+
+// --- Escape HTML ---
+function esc(s) {
+  const d = document.createElement("div");
+  d.textContent = s;
+  return d.innerHTML;
+}
+</script>
+</body>
+</html>
