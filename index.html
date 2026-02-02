@@ -29,165 +29,98 @@
     overflow: hidden;
   }
 
-  /* --- User Picker --- */
   #picker {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100dvh;
-    gap: 16px;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; height: 100dvh; gap: 16px;
   }
-  #picker h1 {
-    font-size: 1.4em;
-    font-weight: 600;
-    color: var(--text-dim);
-    margin-bottom: 8px;
-  }
-  #picker .users {
-    display: flex;
-    gap: 12px;
-  }
+  #picker h1 { font-size: 1.4em; font-weight: 600; color: var(--text-dim); margin-bottom: 8px; }
+  #picker .users { display: flex; gap: 12px; }
   #picker button {
-    padding: 14px 28px;
-    border-radius: 12px;
-    border: 2px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    font-size: 1.1em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
+    padding: 14px 28px; border-radius: 12px; border: 2px solid var(--border);
+    background: var(--surface); color: var(--text); font-size: 1.1em;
+    font-weight: 600; cursor: pointer; transition: all 0.15s;
   }
-  #picker button:hover {
-    border-color: var(--accent);
-    background: #1c2333;
-  }
+  #picker button:hover { border-color: var(--accent); background: #1c2333; }
   #picker button[data-user="jacob"] { border-color: var(--green); color: var(--green); }
   #picker button[data-user="leo"] { border-color: var(--purple); color: var(--purple); }
   #picker button[data-user="op"] { border-color: var(--orange); color: var(--orange); }
 
-  /* --- Chat Layout --- */
   #chat { display: none; flex-direction: column; height: 100dvh; }
   #chat.active { display: flex; }
 
-  /* Header */
   #header {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    background: var(--surface); display: flex; align-items: center;
+    justify-content: space-between; flex-shrink: 0;
   }
   #header .title { font-weight: 600; font-size: 1.1em; }
   #header .status { font-size: 0.85em; color: var(--text-dim); }
   #header .user-badge {
-    font-size: 0.85em;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-weight: 600;
+    font-size: 0.85em; padding: 4px 10px; border-radius: 20px; font-weight: 600;
   }
 
-  /* Messages */
   #messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 12px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    scroll-behavior: smooth;
+    flex: 1; overflow-y: auto; padding: 12px 16px;
+    display: flex; flex-direction: column; gap: 4px; scroll-behavior: smooth;
   }
-
   .msg {
-    max-width: 85%;
-    padding: 8px 12px;
-    border-radius: 12px;
-    word-wrap: break-word;
-    line-height: 1.45;
+    max-width: 85%; padding: 8px 12px; border-radius: 12px;
+    word-wrap: break-word; line-height: 1.45;
   }
-  .msg.mine {
-    align-self: flex-end;
-    background: #1a3a5c;
-    border-bottom-right-radius: 4px;
-  }
-  .msg.theirs {
-    align-self: flex-start;
-    background: var(--surface);
-    border-bottom-left-radius: 4px;
-  }
-  .msg .sender {
-    font-size: 0.8em;
-    font-weight: 600;
-    margin-bottom: 2px;
-  }
+  .msg.mine { align-self: flex-end; background: #1a3a5c; border-bottom-right-radius: 4px; }
+  .msg.theirs { align-self: flex-start; background: var(--surface); border-bottom-left-radius: 4px; }
+  .msg .sender { font-size: 0.8em; font-weight: 600; margin-bottom: 2px; }
   .msg .sender.jacob { color: var(--green); }
   .msg .sender.leo { color: var(--purple); }
   .msg .sender.op { color: var(--orange); }
-  .msg .body { font-size: 0.95em; }
-  .msg .time {
-    font-size: 0.7em;
-    color: var(--text-dim);
-    text-align: right;
-    margin-top: 2px;
-  }
+  .msg .body { font-size: 0.95em; white-space: pre-wrap; }
+  .msg .time { font-size: 0.7em; color: var(--text-dim); text-align: right; margin-top: 2px; }
+  .day-divider { text-align: center; color: var(--text-dim); font-size: 0.75em; padding: 8px 0; }
 
-  .day-divider {
-    text-align: center;
-    color: var(--text-dim);
-    font-size: 0.75em;
-    padding: 8px 0;
-  }
-
-  /* Input */
   #input-area {
-    padding: 10px 12px;
-    border-top: 1px solid var(--border);
-    background: var(--surface);
-    display: flex;
-    gap: 8px;
-    flex-shrink: 0;
+    padding: 10px 12px; border-top: 1px solid var(--border);
+    background: var(--surface); display: flex; gap: 8px; flex-shrink: 0;
   }
   #input-area input {
-    flex: 1;
-    padding: 10px 14px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--text);
-    font-size: 1em;
-    outline: none;
+    flex: 1; padding: 10px 14px; border-radius: 20px;
+    border: 1px solid var(--border); background: var(--bg);
+    color: var(--text); font-size: 1em; outline: none;
   }
   #input-area input:focus { border-color: var(--accent); }
   #input-area button {
-    padding: 10px 18px;
-    border-radius: 20px;
-    border: none;
-    background: var(--accent);
-    color: #fff;
-    font-weight: 600;
-    font-size: 0.95em;
-    cursor: pointer;
+    padding: 10px 18px; border-radius: 20px; border: none;
+    background: var(--accent); color: #fff; font-weight: 600;
+    font-size: 0.95em; cursor: pointer;
   }
   #input-area button:disabled { opacity: 0.4; cursor: default; }
   #input-area button:hover:not(:disabled) { background: #4090e0; }
 
-  /* Connection indicator */
   .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
   .dot.ok { background: var(--green); }
   .dot.err { background: #f85149; }
 
-  /* Scrollbar */
   #messages::-webkit-scrollbar { width: 6px; }
   #messages::-webkit-scrollbar-track { background: transparent; }
   #messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* Settings panel */
+  #settings {
+    display: none; padding: 16px; background: var(--surface);
+    border-bottom: 1px solid var(--border); font-size: 0.85em;
+  }
+  #settings.active { display: block; }
+  #settings label { display: block; margin-bottom: 8px; color: var(--text-dim); }
+  #settings input[type="text"] {
+    width: 100%; padding: 6px 10px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--bg);
+    color: var(--text); font-size: 0.9em; margin-top: 4px;
+  }
+  .gear { cursor: pointer; font-size: 1.2em; opacity: 0.6; }
+  .gear:hover { opacity: 1; }
 </style>
 </head>
 <body>
 
-<!-- User Picker -->
 <div id="picker">
   <h1>🔧 HQ Chat</h1>
   <p style="color: var(--text-dim); margin-bottom: 4px;">Who are you?</p>
@@ -198,14 +131,24 @@
   </div>
 </div>
 
-<!-- Chat -->
 <div id="chat">
   <div id="header">
     <div>
       <span class="title">HQ</span>
       <span class="status"><span class="dot ok" id="connDot"></span><span id="connText">live</span></span>
     </div>
-    <span class="user-badge" id="userBadge"></span>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="gear" onclick="toggleSettings()">⚙️</span>
+      <span class="user-badge" id="userBadge"></span>
+    </div>
+  </div>
+  <div id="settings">
+    <label>Agent webhook URLs (comma-separated):
+      <input type="text" id="webhookUrls" placeholder="http://host:port/hq-webhook, ..." />
+    </label>
+    <p style="color:var(--text-dim);margin-top:4px">
+      Webhooks notify agents of new messages. Leave blank if agents poll.
+    </p>
   </div>
   <div id="messages"></div>
   <div id="input-area">
@@ -216,81 +159,77 @@
 
 <script>
 const CONVEX = "https://scintillating-oriole-769.convex.cloud";
+const CONVEX_SITE = "https://scintillating-oriole-769.convex.site";
 const CHANNEL = "hq";
 const COLORS = { jacob: "jacob", leo: "leo", op: "op" };
 const POLL_MS = 1200;
 
+// Default agent webhooks — update in settings gear
+const DEFAULT_WEBHOOKS = [
+  // Op (leo-lab): only works if you're on the same Docker network or port is mapped
+  // Leo (autoclaude): only works if you're on Tailscale
+  // "http://100.112.19.49:18790/hq-webhook"
+];
+
 let me = null;
 let knownIds = new Set();
 let pollTimer = null;
-let lastError = 0;
 let isAtBottom = true;
 
-// --- User picker ---
 function join(user) {
   me = user;
   document.getElementById("picker").style.display = "none";
-  const chat = document.getElementById("chat");
-  chat.classList.add("active");
-  
+  document.getElementById("chat").classList.add("active");
   const badge = document.getElementById("userBadge");
   badge.textContent = user;
   badge.style.background = user === "jacob" ? "#1a3520" : user === "leo" ? "#2a1a40" : "#3a2a10";
   badge.style.color = user === "jacob" ? "var(--green)" : user === "leo" ? "var(--purple)" : "var(--orange)";
   
+  // Load saved webhook URLs
+  const saved = localStorage.getItem('hq-webhooks');
+  if (saved) document.getElementById('webhookUrls').value = saved;
+  
   document.getElementById("msgInput").focus();
   fetchMessages();
   pollTimer = setInterval(fetchMessages, POLL_MS);
   
-  // Track scroll position
   const el = document.getElementById("messages");
   el.addEventListener("scroll", () => {
     isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 60;
   });
 }
 
-// --- Fetch messages ---
+function toggleSettings() {
+  document.getElementById('settings').classList.toggle('active');
+}
+
 async function fetchMessages() {
   try {
     const res = await fetch(`${CONVEX}/api/query`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        path: "messages:channel",
-        args: { channel: CHANNEL, limit: 100 },
-        format: "json"
-      })
+      body: JSON.stringify({ path: "messages:channel", args: { channel: CHANNEL, limit: 100 }, format: "json" })
     });
     const data = await res.json();
     if (data.status === "success") {
       setConnected(true);
       renderMessages(data.value);
-    } else {
-      setConnected(false);
-    }
-  } catch (e) {
-    setConnected(false);
-  }
+    } else setConnected(false);
+  } catch (e) { setConnected(false); }
 }
 
-// --- Render ---
 function renderMessages(msgs) {
-  // Sort chronological (oldest first)
   msgs.sort((a, b) => a._creationTime - b._creationTime);
-  
   const container = document.getElementById("messages");
   const hadNew = msgs.some(m => !knownIds.has(m._id));
-  
-  if (!hadNew && knownIds.size > 0) return; // no change
+  if (!hadNew && knownIds.size > 0) return;
   
   container.innerHTML = "";
   let lastDate = "";
-  
   msgs.forEach(m => {
     knownIds.add(m._id);
     const d = new Date(m._creationTime);
     const dateStr = d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
-    
     if (dateStr !== lastDate) {
       lastDate = dateStr;
       const div = document.createElement("div");
@@ -298,13 +237,10 @@ function renderMessages(msgs) {
       div.textContent = dateStr;
       container.appendChild(div);
     }
-    
     const isMine = m.from === me;
     const div = document.createElement("div");
     div.className = `msg ${isMine ? "mine" : "theirs"}`;
-    
     const timeStr = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
-    
     div.innerHTML = `
       ${!isMine ? `<div class="sender ${COLORS[m.from] || ''}">${esc(m.from)}</div>` : ''}
       <div class="body">${esc(m.content)}</div>
@@ -312,62 +248,73 @@ function renderMessages(msgs) {
     `;
     container.appendChild(div);
   });
-  
-  // Auto-scroll if user was at bottom
-  if (isAtBottom) {
-    container.scrollTop = container.scrollHeight;
-  }
+  if (isAtBottom) container.scrollTop = container.scrollHeight;
 }
 
-// --- Send ---
 async function send() {
   const input = document.getElementById("msgInput");
   const text = input.value.trim();
   if (!text) return;
-  
   input.value = "";
   document.getElementById("sendBtn").disabled = true;
-  
+
+  const msgData = { from: me, to: CHANNEL, content: text, kind: "chat", channel: CHANNEL };
+
   try {
-    await fetch(`${CONVEX}/api/mutation`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        path: "messages:send",
-        args: { from: me, to: CHANNEL, content: text, kind: "chat", channel: CHANNEL },
-        format: "json"
-      })
-    });
-    // Immediately fetch to show our message
+    // 1. Try Convex HTTP action first (saves + notifies in one call)
+    let saved = false;
+    try {
+      const siteRes = await fetch(`${CONVEX_SITE}/notify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(msgData)
+      });
+      if (siteRes.ok) saved = true;
+    } catch (e) {
+      // HTTP action not deployed yet — fallback to direct mutation
+    }
+
+    // 2. Fallback: direct mutation
+    if (!saved) {
+      await fetch(`${CONVEX}/api/mutation`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path: "messages:send", args: msgData, format: "json" })
+      });
+    }
+
+    // 3. Notify agent webhooks (fire and forget, best effort)
+    const webhookInput = document.getElementById('webhookUrls').value.trim();
+    if (webhookInput) {
+      localStorage.setItem('hq-webhooks', webhookInput);
+      const urls = webhookInput.split(',').map(u => u.trim()).filter(Boolean);
+      for (const url of urls) {
+        fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ from: me, content: text, channel: CHANNEL }),
+          mode: "no-cors" // allow cross-origin without preflight
+        }).catch(() => {}); // fire and forget
+      }
+    }
+
     await fetchMessages();
-  } catch (e) {
-    console.error("Send failed:", e);
-  }
+  } catch (e) { console.error("Send failed:", e); }
   
   document.getElementById("sendBtn").disabled = false;
   input.focus();
 }
 
-// --- Connection status ---
 function setConnected(ok) {
   document.getElementById("connDot").className = `dot ${ok ? "ok" : "err"}`;
   document.getElementById("connText").textContent = ok ? "live" : "reconnecting...";
 }
 
-// --- Enter to send ---
 document.getElementById("msgInput").addEventListener("keydown", (e) => {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    send();
-  }
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
 });
 
-// --- Escape HTML ---
-function esc(s) {
-  const d = document.createElement("div");
-  d.textContent = s;
-  return d.innerHTML;
-}
+function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 </script>
 </body>
 </html>
